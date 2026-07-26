@@ -1,0 +1,6 @@
+streamlit
+streamlit-autorefresh
+streamlit-aggrid
+requests
+pandas
+numpy
