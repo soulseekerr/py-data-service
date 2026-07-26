@@ -1,74 +1,217 @@
-# py-data-service
+# XVA Risk Analytics Dashboard
 
-### Install virtual env
-In a terminal, execute the following commands.
-> python3 -m venv .venv
-> source .venv/bin/activate
-> pip list
-pip     24.3.1
-> pip -m pip install --upgrade pip
-> pip install --upgrade pip
-pip     26.1.2
+A production-style Python application demonstrating a modern backend/frontend architecture for financial risk analytics.
 
+The application exposes REST APIs using **FastAPI**, consumes them from a **Streamlit** dashboard, stores data in **PostgreSQL**, and is fully containerised with **Docker Compose**.
 
-(*) api → Python app (FastAPI) served by uvicorn, connecting to the Postgres DB via service name db.
+Although inspired by XVA risk management workflows used in investment banking, the project uses simplified datasets and is intended as a software engineering portfolio project.
 
-create folder 'api'
-create requirements.txt in api
+---
 
-fastapi
-uvicorn[standard]
-psycopg[binary]
-psycopg_pool
-pydantic
-pandas
-pyarrow
-duckdb
-numpy
-pandera
-python-multipart
+## Features
 
-> pip install -r requirements.txt
+- FastAPI REST API
+- Streamlit interactive dashboard
+- PostgreSQL backend
+- Docker Compose deployment
+- Health monitoring endpoint
+- Version endpoint
+- Scenario Mapping viewer
+- Counterparty monitoring dashboard
+- Interactive AG Grid tables
+- Custom JavaScript cell renderers
+- Modular architecture
+- Automated tests using pytest
 
-create folder 'streamlit'
-create requirements.txt in streamlit
+---
 
-streamlit
-streamlit-autorefresh
-requests
-pandas
-numpy
+## Architecture
 
-> pip install -r requirements.txt
+```
+                +------------------+
+                |   Streamlit UI   |
+                +---------+--------+
+                          |
+                     REST API
+                          |
+                +---------v--------+
+                |     FastAPI      |
+                +---------+--------+
+                          |
+                    Business Logic
+                          |
+                +---------v--------+
+                |   PostgreSQL     |
+                +------------------+
+```
 
-create docker files for api and streamlit
+---
 
-create docker compose file
-...
-...
-[+] Running 9/9
- ✔ py-data-service-api                    B...                       0.0s 
- ✔ py-data-service-streamlit              Built                      0.0s 
- ✔ Network py-data-service_default        Created                    0.0s 
- ✔ Volume "py-data-service_pgadmin_data"  Created                    0.0s 
- ✔ Volume "py-data-service_db_data"       Created                    0.0s 
- ✔ Container py-data-service-db-1         Healthy                    5.8s 
- ✔ Container py-data-service-api-1        Started                    5.9s 
- ✔ Container py-data-service-pgadmin-1    Started                    5.9s 
- ✔ Container py-data-service-streamlit-1  Started                    6.0s
+## Technology Stack
 
- ## Testing
+| Component | Technology |
+|----------|------------|
+| Backend | FastAPI |
+| Frontend | Streamlit |
+| Database | PostgreSQL |
+| Grid | AG Grid |
+| Language | Python 3.12 |
+| Containerisation | Docker Compose |
+| Testing | pytest |
+| HTTP | requests |
+| Validation | Pydantic |
 
-docker compose down --volumes --remove-orphans
-docker compose up -d --build
-docker compose logs -f db
-docker compose ps
-docker compose exec api sh -lc 'ls -lh data' 
+---
 
-docker compose down api
-docker compose build api
-docker compose up -d --build
-docker compose logs -f api
-docker compose down -v && docker compose up -d --build
+## Project Structure
 
-docker compose down streamlit && docker compose up streamlit -d --build
+```
+project/
+
+├── api/
+│   ├── routers/
+│   ├── schemas/
+│   ├── services/
+│   └── app.py
+│
+├── streamlit/
+│   ├── api_client/
+│   ├── grids/
+│   ├── renderers/
+│   ├── views/
+│   ├── components/
+│   └── app.py
+│
+├── db/
+│
+├── tests/
+│
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## Example Dashboard
+
+### Counterparty Monitoring
+
+- Status badges
+- Confidence indicators
+- GRR values
+- Interactive filtering
+- Row selection
+
+### Scenario Mapping
+
+- Tier grouping
+- Scenario filtering
+- Mapping validation
+- File monitoring
+
+---
+
+## Design Principles
+
+This project intentionally separates responsibilities:
+
+```
+Streamlit View
+        │
+        ▼
+API Client
+        │
+        ▼
+FastAPI Router
+        │
+        ▼
+Business Logic
+        │
+        ▼
+Database
+```
+
+The frontend never talks directly to the database.
+
+All communication happens through REST APIs.
+
+---
+
+## Running the project
+
+```bash
+docker compose up --build
+```
+
+API
+
+```
+http://localhost:8000
+```
+
+Swagger
+
+```
+http://localhost:8000/docs
+```
+
+Dashboard
+
+```
+http://localhost:8501
+```
+
+---
+
+## Testing
+
+Run the complete test suite
+
+```bash
+python -m pytest
+```
+
+Generate coverage
+
+```bash
+python -m pytest --cov=api --cov=streamlit --cov-report=html
+```
+
+---
+
+## Skills Demonstrated
+
+- Python
+- FastAPI
+- Streamlit
+- REST APIs
+- PostgreSQL
+- Docker
+- Docker Compose
+- Pydantic
+- pytest
+- Software Architecture
+- Dependency Separation
+- Data Validation
+- Error Handling
+- Financial Risk Analytics
+
+---
+
+## Future Improvements
+
+- Authentication
+- CI/CD using GitHub Actions
+- Alembic migrations
+- Async database access
+- Repository / Service pattern
+- Ruff
+- mypy
+- Prometheus metrics
+- OpenTelemetry
+
+---
+
+## About
+
+This repository was developed as a software engineering portfolio project demonstrating modern Python application architecture inspired by front-office financial risk systems.
