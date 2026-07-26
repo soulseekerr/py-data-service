@@ -6,7 +6,7 @@ import requests
 import pandas as pd
 import streamlit as st
 
-from api import load_counterparty_data
+from api_client import load_counterparty_data
 from grids import display_counterparty_grid
 
 

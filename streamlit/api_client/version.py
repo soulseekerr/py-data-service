@@ -1,7 +1,7 @@
 
 import os
 import streamlit as st
-from api.client import get_json
+from api_client.client import get_json
 
 
 def load_api_version() -> str:

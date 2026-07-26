@@ -4,16 +4,16 @@ FROM python:3.12-slim-bookworm
 RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev \
   && rm -rf /var/lib/apt/lists/*
 
-COPY . /app/api/
-COPY requirements.txt .
+WORKDIR /app
 
-WORKDIR /app/api
+COPY api/requirements.txt /app/api/requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/api/requirements.txt
 
-# COPY . .
+COPY api /app/api
+
 EXPOSE 8000
 
 # uvicorn runs the FastAPI app below
 # ENTRYPOINT ["uvicorn"]
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+CMD ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]

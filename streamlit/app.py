@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
-from api import ApiError, check_api_health, load_api_version
+from api_client import ApiError, check_api_health, load_api_version
 
 from components.sidebar import render_sidebar
 

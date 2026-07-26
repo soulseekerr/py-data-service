@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter
-from routers.version import router as version_router
-from routers.counterparties import router as counterparty_router
-from routers.scenarios import router as scenarios_router
+from .routers.version import router as version_router
+from .routers.counterparties import router as counterparty_router
+from .routers.scenarios import router as scenarios_router
 
 app = FastAPI(title="My Risk Analytics API")
 

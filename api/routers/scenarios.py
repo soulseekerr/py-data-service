@@ -2,7 +2,7 @@
 from datetime import date
 from fastapi import APIRouter, Query
 
-from schemas.scenario import ScenarioMapping
+from ..schemas.scenario import ScenarioMapping
 
 router = APIRouter(
     prefix="/v1",

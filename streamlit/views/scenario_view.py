@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import streamlit as st
 
-from api import load_scenarios
+from api_client import load_scenarios
 from grids import display_scenario_grid
 
 

@@ -2,7 +2,7 @@
 from datetime import date
 from fastapi import APIRouter, Query
 
-from schemas.counterparty import CounterpartyMapping
+from ..schemas.counterparty import CounterpartyMapping
 
 router = APIRouter(
     prefix="/v1",
