@@ -6,6 +6,8 @@ from streamlit_autorefresh import st_autorefresh
 
 from api import ApiError, check_api_health, load_api_version
 
+from components.sidebar import render_sidebar
+
 from views import (
     show_counterparty_view,
     show_scenario_view,
@@ -74,52 +76,18 @@ def main():
 
     st.session_state.TestCounter += 1
 
-    with st.sidebar:
-        st.title("XVA Dashboard")
+    sidebar = render_sidebar(
+        api_status=api_status,
+        version=version,
+        api_url=API,
+        refresh_count=st.session_state.TestCounter,
+    )
 
-        view = st.radio(
-            "Navigation",
-            options=[
-                "Counterparties",
-                "Scenario Mappings",
-            ],
-            index=0,
-        )
+    if sidebar.view == "Counterparties":
+        show_counterparty_view(sidebar.cob_date)
 
-        st.divider()
-
-        cob_date = st.date_input(
-            "COB Date",
-            value=pd.to_datetime("2026-07-13"),
-        )
-
-        st.divider()
-
-        st.caption("System")
-
-        status_icon = "🟢" if api_status == "Online" else "🔴"
-
-        st.write(
-            f"{status_icon} **API:** {api_status}"
-        )
-
-        st.write(
-            f"**Version:** {version}"
-        )
-
-        st.write(
-            f"**Refresh:** "
-            f"{st.session_state.TestCounter}"
-        )
-
-        st.caption(f"Endpoint: {API}")
-
-    if view == "Counterparties":
-        show_counterparty_view(cob_date)
-
-    elif view == "Scenario Mappings":
-        show_scenario_view(cob_date)
-
+    elif sidebar.view == "Scenario Mappings":
+        show_scenario_view(sidebar.cob_date)
 
 if __name__ == '__main__':
     main()
