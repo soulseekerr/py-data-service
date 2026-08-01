@@ -13,7 +13,7 @@ EXPECTED_FIELDS = {
     "MercuryFile",
     "MrxFile",
     "Path",
-    "IsFilePresent",
+    "FileStatus",
 }
 
 
@@ -53,7 +53,8 @@ def test_scenario_file_presence_has_known_value() -> None:
     assert response.status_code == 200
 
     for scenario in response.json():
-        assert scenario["IsFilePresent"] in {
-            "Yes",
-            "No",
+        assert scenario["FileStatus"] in {
+            "Present",
+            "Missing",
+            "Unknown",
         }

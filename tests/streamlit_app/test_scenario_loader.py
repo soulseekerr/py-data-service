@@ -18,7 +18,7 @@ VALID_PAYLOAD = [
         "MercuryFile": "CR_SP01.csv",
         "MrxFile": "CREDIT_DELTA_GEAR.DAT",
         "Path": "downstream",
-        "IsFilePresent": "Yes",
+        "FileStatus": "Present",
     }
 ]
 

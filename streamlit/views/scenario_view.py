@@ -61,6 +61,47 @@ def display_scenario_details(
         st.markdown("**MRX File**")
         st.write(scenario.get("MrxFile", "—"))
 
+def filter_scenarios(
+    scenario_df: pd.DataFrame,
+    search_text: str,
+) -> pd.DataFrame:
+    """Filter scenarios using a case-insensitive search across all columns."""
+
+    search_text = search_text.strip()
+
+    if not search_text:
+        return scenario_df
+
+    searchable_columns = [
+        "Scenario",
+        "MercuryFile",
+        "MrxFile",
+    ]
+
+    search_mask = pd.Series(
+        False,
+        index=scenario_df.index,
+    )
+
+    for column in searchable_columns:
+        if column not in scenario_df.columns:
+            continue
+
+        column_matches = (
+            scenario_df[column]
+            .fillna("")
+            .astype(str)
+            .str.contains(
+                search_text,
+                case=False,
+                regex=False,
+            )
+        )
+
+        search_mask = search_mask | column_matches
+
+    return scenario_df.loc[search_mask].copy()
+
 def show_scenario_view(cob_date: date) -> None:
     """Load and render the scenario mapping view."""
 
@@ -130,7 +171,73 @@ def show_scenario_view(cob_date: date) -> None:
         )
         return
 
-    grid_response = display_scenario_grid(scenario_df)
+    # grid_response = display_scenario_grid(scenario_df)
+
+    search_text = st.text_input(
+        "Search scenarios",
+        placeholder=(
+            "Search by scenario or file name"
+        ),
+        key="scenario_search",
+    )
+
+    filtered_scenario_df = filter_scenarios(
+        scenario_df,
+        search_text,
+    )
+
+    result_count = len(filtered_scenario_df)
+    total_count = len(scenario_df)
+
+    if search_text:
+        st.caption(
+            f"Showing {result_count} of {total_count} scenarios"
+        )
+    else:
+        st.caption(
+            f"{total_count} scenarios"
+        )
+
+    if filtered_scenario_df.empty:
+        st.session_state.selected_scenario = None
+
+        st.info(
+            f'No scenarios match "{search_text}".'
+        )
+        return
+
+    if "scenario_group_expansion" not in st.session_state:
+        st.session_state.scenario_group_expansion = 0
+
+    expand_column, collapse_column, spacer = st.columns([1, 1, 6])
+
+    with expand_column:
+        if st.button(
+            "⊞ Expand all",
+            key="expand_all_scenarios",
+            use_container_width=True,
+        ):
+            st.session_state.scenario_group_expansion = -1
+
+    with collapse_column:
+        if st.button(
+            "⊟ Collapse all",
+            key="collapse_all_scenarios",
+            use_container_width=True,
+        ):
+            st.session_state.scenario_group_expansion = 0
+
+    st.caption(
+        f"Showing {len(filtered_scenario_df)} "
+        f"of {len(scenario_df)} scenarios"
+    )
+
+    grid_response = display_scenario_grid(
+        filtered_scenario_df,
+        group_expansion=(
+            st.session_state.scenario_group_expansion
+        ),
+    )
 
     selected_scenario = get_selected_row(grid_response.get("selected_rows"))
 

@@ -30,6 +30,7 @@ services:
       - "8000:8000"
     volumes:
       - .data:/app/.data   # so we can see outputs on host
+      - ./mock_data:/app/mock_data:ro
 
   pgadmin:
     image: dpage/pgadmin4:latest

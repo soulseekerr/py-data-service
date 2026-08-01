@@ -72,3 +72,5 @@ docker compose logs -f api
 docker compose down -v && docker compose up -d --build
 
 docker compose down streamlit && docker compose up streamlit -d --build
+
+docker compose exec api find /app/mock_data -maxdepth 3 -type f

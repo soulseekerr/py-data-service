@@ -34,7 +34,7 @@ def prepare_scenario_data(df: pd.DataFrame) -> pd.DataFrame:
     return prepared_df
 
 
-def display_scenario_grid(df: pd.DataFrame):
+def display_scenario_grid(df: pd.DataFrame, group_expansion: int = 0,) -> AgGrid:
     """Render the expandable scenario tree grouped by tier."""
 
     scenarios_df = prepare_scenario_data(df)
@@ -84,7 +84,7 @@ def display_scenario_grid(df: pd.DataFrame):
     )
 
     scenario_gb.configure_column(
-            "IsFilePresent",
+            "FileStatus",
             header_name="Is File Present",
             minWidth=100,
         )
@@ -115,6 +115,8 @@ def display_scenario_grid(df: pd.DataFrame):
 
     grid_options = scenario_gb.build()
 
+    grid_options["groupDefaultExpanded"] = group_expansion
+
     return AgGrid(
         scenarios_df,
         gridOptions=grid_options,
@@ -131,5 +133,8 @@ def display_scenario_grid(df: pd.DataFrame):
         enable_enterprise_modules=True,
 
         theme="streamlit",
-        key="scenario-grid",
+
+        # Changing the key forces the component to apply
+        # the new expansion setting.
+        key=f"scenario-grid-{group_expansion}",
     )

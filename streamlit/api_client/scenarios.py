@@ -11,7 +11,7 @@ EXPECTED_COLUMNS = [
     "MercuryFile",
     "MrxFile",
     "Path",
-    "IsFilePresent"
+    "FileStatus",
 ]
 
 
