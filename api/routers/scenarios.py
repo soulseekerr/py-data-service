@@ -1,10 +1,13 @@
 
+import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from fastapi import APIRouter, Query
 
 from api.services.file_service import FilePresence, probe_file
 from ..schemas.scenario import ScenarioMapping
+
+logger = logging.getLogger(__name__)
 
 def probe_files(files: list[ScenarioMapping]) -> list[ScenarioMapping]:
     """Probe files in concurrent threads and update the FileStatus attribute of each ScenarioMapping object."""
@@ -40,6 +43,11 @@ def get_scenarios(
     cob_date: date = Query(...),
 ) -> list[ScenarioMapping]:
     """Get scenarios status for the given COB date."""
+
+    logger.info(
+        "Loading scenarios for cob_date=%s",
+        cob_date,
+    )
 
     SCENARIOS = [
         ScenarioMapping(
@@ -159,7 +167,7 @@ def get_scenarios(
 
     probe_results = probe_files(SCENARIOS)
 
-    return [
+    results = [
         scenario.model_copy(
             update={
                 "FileStatus": result.FileStatus,
@@ -171,3 +179,10 @@ def get_scenarios(
             strict=True,
         )
     ]
+
+    logger.info(
+        "Loaded scenarios for cob_date=%s",
+        cob_date,
+    )
+
+    return results

@@ -1,8 +1,11 @@
 
+import logging
 from datetime import date
 from fastapi import APIRouter, Query
 
 from ..schemas.counterparty import CounterpartyMapping
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/v1",
@@ -17,7 +20,13 @@ router = APIRouter(
 def get_counterparties(
     cob_date: date = Query(...),
 ) -> list[CounterpartyMapping]:
-    return [
+
+    logger.info(
+        "Loading counterparties for cob_date=%s",
+        cob_date,
+    )
+
+    results = [
         {
             "Counterparty": "BNP",
             "CVAMethod": "Financial",
@@ -61,3 +70,10 @@ def get_counterparties(
             "Confidence": 60,
         }
     ]
+
+    logger.info(
+        "Loaded counterparties for cob_date=%s",
+        cob_date,
+    )
+
+    return results

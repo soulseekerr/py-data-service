@@ -1,9 +1,11 @@
 
-import os
+import logging
 from datetime import date
 import pandas as pd
 
 from .client import get_json
+
+logger = logging.getLogger(__name__)
 
 EXPECTED_COLUMNS = [
     "Tier",
@@ -19,6 +21,11 @@ def load_scenarios(
         selected_date: date
 ) -> pd.DataFrame:
     """Load scenario mappings from the API."""
+
+    logger.info(
+        "Loading scenario data from API for cob_date=%s",
+        selected_date,
+    )
 
     payload = get_json(
         "/scenarios",

@@ -4,14 +4,16 @@ import pandas as pd
 import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 
+from core.logging import configure_logging
 from api_client import ApiError, check_api_health, load_api_version
-
 from components.sidebar import render_sidebar
 
 from views import (
     show_counterparty_view,
     show_scenario_view,
 )
+
+configure_logging()
 
 API = os.getenv("API_URL", "http://api:8000/v1")
 

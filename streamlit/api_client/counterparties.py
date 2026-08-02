@@ -1,8 +1,11 @@
 
+import logging
 import os
 import requests
 import pandas as pd
 
+
+logger = logging.getLogger(__name__)
 
 API = os.getenv("API_URL", "http://api:8000/v1")
 
@@ -15,6 +18,12 @@ def load_counterparty_data(selected_date) -> pd.DataFrame:
     params = {
         "cob_date": selected_date.isoformat(),
     }
+
+    logger.info(
+        "Loading counterparty data from API: %s with params: %s",
+        endpoint_url,
+        params,
+    )
 
     try:
         response = requests.get(

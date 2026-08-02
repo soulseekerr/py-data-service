@@ -52,6 +52,8 @@ services:
       context: ./streamlit
       dockerfile: streamlit.Dockerfile
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       API_URL: http://api:8000/v1
     depends_on:
